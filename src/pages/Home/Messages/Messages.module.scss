@@ -1,0 +1,23 @@
+.textsmall {
+  font-size: 0.9rem;
+}
+
+.messagesbox,
+.chatbox {
+  height: 510px;
+  overflow-y: scroll;
+  padding-bottom: 10px;
+}
+
+.roundedlg {
+  border-radius: 0.5rem;
+}
+
+input::placeholder {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+.inputbox {
+    margin-bottom: 10px;
+}
