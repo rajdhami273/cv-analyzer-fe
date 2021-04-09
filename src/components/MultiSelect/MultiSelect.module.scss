@@ -1,0 +1,45 @@
+.container {
+  //   margin-bottom: 20px;
+  .inputContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    .inp {
+      padding-right: 30px;
+    }
+  }
+  .dropdown {
+    position: absolute;
+    z-index: 1;
+    // background-color: $colorWhite;
+    box-shadow: 0px 0px 20px 000000f;
+    width: 93%;
+    .searchbar {
+      //   margin-bottom: 10px;
+    }
+    .itemContainer {
+      max-height: 200px;
+      overflow-y: scroll;
+      margin-top: 10px;
+
+      .item {
+        padding: 10px;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          background-color: #d5f8ce;
+        }
+        .check {
+          border: 2px solid black;
+          border-left: none;
+          border-top: none;
+          width: 10px;
+          height: 20px;
+          transform: rotate(50deg);
+        }
+      }
+    }
+    .selected {
+      background-color: aqua !important;
+    }
+  }
+}

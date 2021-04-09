@@ -4,7 +4,7 @@ import css from "./MyApplicationDescription.module.scss";
     
 const MyApplicationDescription = (props) => {
     return (
-        <></>
+        <>M</>
     );
 }
 

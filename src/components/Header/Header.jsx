@@ -6,10 +6,14 @@ import css from "./Header.module.scss";
 const Header = ({ routes }) => {
   const { userType } = useContext(AppContext);
   const location = useLocation();
+  const history = useHistory();
+  const goToHome = () => history.push("/home");
   return (
     <div className={css.wrapper}>
       <div className={css.container}>
-        <div className={css.logo}>CVAnalyzer</div>
+        <div className={css.logo} onClick={goToHome}>
+          CVAnalyzer
+        </div>
         <div className={css.linksContainer}>
           {routes.map((item, index) => {
             const { name, path, exact, roles } = item;
@@ -20,9 +24,9 @@ const Header = ({ routes }) => {
               <Link
                 key={index}
                 to={path}
-                className={`${css.links} ${
-                  !exact && location.pathname.match(path) && css.active
-                } ${location.pathname === path && css.active}`}
+                className={`${css.links} ${!exact &&
+                  location.pathname.match(path) &&
+                  css.active} ${location.pathname === path && css.active}`}
               >
                 {name}
               </Link>

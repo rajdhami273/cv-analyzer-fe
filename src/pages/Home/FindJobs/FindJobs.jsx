@@ -3,8 +3,9 @@ import { Route, Switch, useHistory, useRouteMatch } from "react-router";
 import FindJobDescription from "./FindJobDescription/FindJobDescription";
 import css from "./FindJobs.module.scss";
 import FindJobsList from "./FindJobsList/FindJobsList";
+import Apply from "./Apply/Apply";
 
-const FindJobs = (props) => {
+const FindJobs = props => {
   const history = useHistory();
   const { url } = useRouteMatch();
   const routes = [
@@ -13,15 +14,22 @@ const FindJobs = (props) => {
       component: <FindJobsList />,
       path: url + "",
       name: "Find Jobs List",
-      type: "",
+      type: ""
     },
     {
       exact: true,
       component: <FindJobDescription />,
       path: url + "/:id",
       name: "Find Job Description",
-      type: "",
+      type: ""
     },
+    {
+      exact: true,
+      component: <Apply />,
+      path: url + "/apply/:id",
+      name: "Apply",
+      type: ""
+    }
   ];
   return (
     <Switch>
