@@ -17,7 +17,10 @@ const MyData = props => {
   );
   return (
     <div className="row">
-      <div className="col-12">{qAndAView("Experience", 2)}</div>
+      <div className="col-12">
+        {qAndAView("Experience", 2)}
+        {qAndAView("Experience", 2)}
+      </div>
     </div>
   );
 };
