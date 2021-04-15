@@ -23,6 +23,7 @@
       .links {
         color: white;
         transition: all 2s ease-in;
+        cursor: pointer;
         &.active,
         &:hover {
           color: white;

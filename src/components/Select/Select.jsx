@@ -14,7 +14,9 @@ const Select = ({
   error,
   required,
   readOnly,
-  showDefaultOption
+  showDefaultOption,
+  titleKey,
+  valueKey
 }) => {
   return (
     <div className="form-group">
@@ -38,8 +40,8 @@ const Select = ({
         {options.map((item, index) => {
           // const { value, title } = item;
           return (
-            <option key={index} value={item}>
-              {item}
+            <option key={index} value={valueKey ? item[valueKey] : item}>
+              {titleKey ? item[titleKey] : item}
             </option>
           );
         })}

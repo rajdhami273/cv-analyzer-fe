@@ -30,7 +30,7 @@ const MultiSelect = ({
   const toggleDropdown = () => setDropdownVisible(!dropdownVisible);
 
   useEffect(() => {
-    console.log("hello", options);
+    // console.log("hello", options);
     setNewOptions(options);
   }, [options, value]);
   return (

@@ -1,27 +1,84 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import css from "./CreateJob.module.scss";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Input from "../../../components/Input/Input";
 import MultiSelect from "../../../components/MultiSelect/MultiSelect";
 import Select from "../../../components/Select/Select";
+import https from "../../../services/https";
+import { AppContext } from "../../../AppProvider";
+import Questions from "./Questions";
+import { skills } from "../../../core/static/skills";
 const CreateJob = props => {
+  const { userDetails } = useContext(AppContext);
+  const formRef = useRef(null);
   const [options, setOptions] = useState([]);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([]);
   const [personalityQuestions, setPersonalityQuestions] = useState([]);
+
+  const [creating, setCreating] = useState(false);
+  const validationSchema = Yup.object().shape({
+    title: Yup.string()
+      .label("Title")
+      .required("Title required"), //Yup.string().required("Username or email required"),
+    description: Yup.string()
+      .label("Description")
+      .required("Description required"),
+    location: Yup.string()
+      .label("Location")
+      .required(),
+    minimumExperience: Yup.number()
+      .label("Minimum Experience")
+      .required(),
+    skills: Yup.array()
+      .label("Skills")
+      .required()
+      .min(1, "Minimum one required")
+    // rememberMe: Yup.boolean().label("rememberMe")
+    // .checkboxChecked("")
+  });
+  const createJob = async values => {
+    setCreating(true);
+    try {
+      const res = await https.post("/job", {
+        ...values,
+        aptitudeQuestions,
+        personalityQuestions,
+        user: userDetails._id
+      });
+      if (res.data) {
+        console.log(res.data);
+        formRef.current.resetForm();
+        setAptitudeQuestions([]);
+        setPersonalityQuestions([]);
+      }
+    } catch (error) {
+      if (error.response) {
+        // setErrorMessage(error.response.data.message);
+      } else {
+        // setErrorMessage(error.message);
+      }
+    } finally {
+      setCreating(!true);
+    }
+  };
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-center position-relative">
       {
         <Formik
+          innerRef={formRef}
           enableReinitialize
           initialValues={{
             title: "",
+            description: "",
             location: "",
             minimumExperience: 0,
             skills: []
           }}
+          validationSchema={validationSchema}
           onSubmit={values => {
             console.log(values, aptitudeQuestions, personalityQuestions);
+            createJob(values);
           }}
         >
           {formik => {
@@ -37,7 +94,7 @@ const CreateJob = props => {
             } = formik;
             return (
               <>
-                <div className="col-6">
+                <div className="col-6 position-relative">
                   <Input
                     label="Title"
                     placeholder="Enter title"
@@ -45,6 +102,14 @@ const CreateJob = props => {
                     onChange={handleChange("title")}
                     onBlur={handleBlur("title")}
                     error={touched.title && errors.title}
+                  />
+                  <Input
+                    label="Description"
+                    placeholder="Enter description"
+                    value={values.description || initialValues.description}
+                    onChange={handleChange("description")}
+                    onBlur={handleBlur("description")}
+                    error={touched.description && errors.description}
                   />
                   <Input
                     label="Location"
@@ -72,7 +137,7 @@ const CreateJob = props => {
                     label="Required Skills"
                     placeholder="Click here to select or add..."
                     value={values.skills || initialValues.skills}
-                    options={options}
+                    options={skills}
                     onChange={item => {
                       let arr = [...values.skills];
                       const isSelected = arr.indexOf(item);
@@ -87,245 +152,40 @@ const CreateJob = props => {
                     onBlur={handleBlur("skills")}
                     error={touched.skills && errors.skills}
                     readOnly
-                    addOptionWithSearch
+                    // addOptionWithSearch
                     showSearchBar
-                    saveNewOption
-                    saveNewOptionFunction={option =>
-                      setOptions([...options, option])
-                    }
+                    // saveNewOption
+                    // saveNewOptionFunction={option =>
+                    //   setOptions([...options, option])
+                    // }
+                    required={true}
                   />
                 </div>
                 <div className="col-12 my-2"></div>
                 <div className="col-6">
-                  <h3>Aptitude questions set</h3>
-                  {aptitudeQuestions.map((item, index) => {
-                    let { inputType, question, options } = item;
-                    return (
-                      <div key={index}>
-                        <Select
-                          label="Select input type"
-                          options={["select", "radio"]}
-                          value={inputType || ""}
-                          onChange={val => {
-                            let arr = [...aptitudeQuestions];
-                            arr[index].inputType = val;
-                            setAptitudeQuestions(arr);
-                          }}
-                          onBlur={() => {}}
-                        />
-                        <Input
-                          label="Enter question"
-                          value={question}
-                          onBlur={() => {}}
-                          onChange={event => {
-                            let arr = [...aptitudeQuestions];
-                            let val = event.target.value;
-                            arr[index].question = val;
-                            setAptitudeQuestions(arr);
-                          }}
-                        />
-                        {/* <Input
-                          label="Enter label"
-                          value={label}
-                          onBlur={() => {}}
-                          onChange={event => {
-                            let arr = [...aptitudeQuestions];
-                            let val = event.target.value;
-                            arr[index].label = val;
-                            setAptitudeQuestions(arr);
-                          }}
-                        />
-                        <Input
-                          label="Enter placeholder"
-                          value={placeholder}
-                          onBlur={() => {}}
-                          onChange={event => {
-                            let arr = [...aptitudeQuestions];
-                            let val = event.target.value;
-                            arr[index].placeholder = val;
-                            setAptitudeQuestions(arr);
-                          }}
-                        /> */}
-                        {options.map((itm, idx) => {
-                          const { title, weightage } = itm;
-                          return (
-                            <div key={index + "" + idx}>
-                              <Input
-                                label="Enter title"
-                                value={title}
-                                onBlur={() => {}}
-                                onChange={event => {
-                                  let arr = [...aptitudeQuestions];
-                                  let val = event.target.value;
-                                  arr[index].options[idx].title = val;
-                                  setAptitudeQuestions(arr);
-                                  // let optionsTemp = [...options];
-                                  // optionsTemp[idx].title = title;
-                                  // let
-                                }}
-                              />
-                              <Input
-                                label="Enter weightage"
-                                value={weightage}
-                                type="number"
-                                onBlur={() => {}}
-                                onChange={event => {
-                                  let arr = [...aptitudeQuestions];
-                                  let val = event.target.value;
-                                  arr[index].options[idx].weightage = val;
-                                  setAptitudeQuestions(arr);
-                                }}
-                              />
-                            </div>
-                          );
-                        })}
-                        <button
-                          className="btn btn-secondary my-1 btn-sm"
-                          onClick={() => {
-                            options.push({
-                              title: "",
-                              weightage: 0
-                            });
-                            let arr = [...aptitudeQuestions];
-                            arr[index].options = options;
-                            setAptitudeQuestions(arr);
-                          }}
-                        >
-                          Add options
-                        </button>
-                      </div>
-                    );
-                  })}
-                  <button
-                    className="btn btn-secondary my-1"
-                    onClick={() => {
-                      let arr = [...aptitudeQuestions];
-                      arr.push({
-                        inputType: "",
-                        question: "",
-                        options: []
-                      });
-                      setAptitudeQuestions(arr);
-                    }}
-                  >
-                    Add question
-                  </button>
+                  <Questions
+                    sectionName="Aptitude"
+                    questionsArray={aptitudeQuestions}
+                    setQuestionsArray={setAptitudeQuestions}
+                  />
                 </div>
                 <div className="col-12 my-2"></div>
                 <div className="col-6">
-                  <h3>Personality questions set</h3>
-                  {personalityQuestions.map((item, index) => {
-                    let { inputType, question, options } = item;
-                    return (
-                      <div>
-                        <Select
-                          label="Select input type"
-                          options={["select", "radio"]}
-                          value={inputType || ""}
-                          onChange={val => {
-                            let arr = [...personalityQuestions];
-                            arr[index].inputType = val;
-                            personalityQuestions(arr);
-                          }}
-                          onBlur={() => {}}
-                        />
-                        <Input
-                          label="Enter question"
-                          value={question}
-                          onBlur={() => {}}
-                          onChange={event => {
-                            let arr = [...personalityQuestions];
-                            let val = event.target.value;
-                            arr[index].question = val;
-                            personalityQuestions(arr);
-                          }}
-                        />
-                        {/* <Input
-                          label="Enter label"
-                          value={label}
-                          onBlur={() => {}}
-                          onChange={event => {
-                            let arr = [...personalityQuestions];
-                            let val = event.target.value;
-                            arr[index].label = val;
-                            personalityQuestions(arr);
-                          }}
-                        />
-                        <Input
-                          label="Enter placeholder"
-                          value={label}
-                          onBlur={() => {}}
-                          onChange={event => {
-                            let arr = [...personalityQuestions];
-                            let val = event.target.value;
-                            arr[index].placeholder = val;
-                            personalityQuestions(arr);
-                          }}
-                        /> */}
-                        {options.map((itm, idx) => {
-                          const { title, weightage } = itm;
-                          return (
-                            <>
-                              <Input
-                                label="Enter title"
-                                value={title}
-                                onBlur={() => {}}
-                                onChange={event => {
-                                  let arr = [...personalityQuestions];
-                                  let val = event.target.value;
-                                  arr[index].options[idx].title = val;
-                                  personalityQuestions(arr);
-                                }}
-                              />
-                              <Input
-                                label="Enter weightage"
-                                value={weightage}
-                                type="number"
-                                onBlur={() => {}}
-                                onChange={event => {
-                                  let arr = [...personalityQuestions];
-                                  let val = event.target.value;
-                                  arr[index].options[idx].title = val;
-                                  personalityQuestions(arr);
-                                }}
-                              />
-                            </>
-                          );
-                        })}
-                        <button
-                          className="btn btn-secondary my-1 btn-sm"
-                          onClick={() => {
-                            options.push({
-                              title: "",
-                              weightage: 0
-                            });
-                            let arr = [...personalityQuestions];
-                            arr[index].options = options;
-                            personalityQuestions(arr);
-                          }}
-                        >
-                          Add options
-                        </button>
-                      </div>
-                    );
-                  })}
-                  <button
-                    className="btn btn-secondary my-1"
-                    onClick={() => {
-                      let arr = [...personalityQuestions];
-                      arr.push({
-                        inputType: "",
-                        question: "",
-                        options: []
-                      });
-                      personalityQuestions(arr);
-                    }}
-                  >
-                    Add question
-                  </button>
+                  <Questions
+                    sectionName="Personality"
+                    questionsArray={personalityQuestions}
+                    setQuestionsArray={setPersonalityQuestions}
+                  />
                 </div>
                 <div className="col-12 my-4"></div>
                 <button className="btn btn-primary w-50" onClick={handleSubmit}>
+                  {creating ? (
+                    <span
+                      className="spinner-border spinner-border-sm mr-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : null}
                   Post
                 </button>
               </>

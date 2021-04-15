@@ -4,10 +4,15 @@ import { AppContext } from "../../AppProvider";
 import css from "./Header.module.scss";
 
 const Header = ({ routes }) => {
-  const { userType } = useContext(AppContext);
+  const { userType, resetApp } = useContext(AppContext);
   const location = useLocation();
   const history = useHistory();
   const goToHome = () => history.push("/home");
+  const logout = () => {
+    resetApp();
+    // history.replace("/home", "/");
+    history.push("/");
+  };
   return (
     <div className={css.wrapper}>
       <div className={css.container}>
@@ -17,9 +22,9 @@ const Header = ({ routes }) => {
         <div className={css.linksContainer}>
           {routes.map((item, index) => {
             const { name, path, exact, roles } = item;
-            // if (roles.indexOf(userType) === -1) {
-            //   return null;
-            // }
+            if (roles.indexOf(userType) === -1) {
+              return null;
+            }
             return (
               <Link
                 key={index}
@@ -32,6 +37,9 @@ const Header = ({ routes }) => {
               </Link>
             );
           })}
+          <a className={css.links} onClick={logout}>
+            Logout
+          </a>
         </div>
       </div>
     </div>

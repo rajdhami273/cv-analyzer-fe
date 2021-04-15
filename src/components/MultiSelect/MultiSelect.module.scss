@@ -12,8 +12,9 @@
     position: absolute;
     z-index: 1;
     // background-color: $colorWhite;
-    box-shadow: 0px 0px 20px 000000f;
+    box-shadow: 0px 0px 10px #00000029;
     width: 93%;
+    background-color: #fff;
     .searchbar {
       //   margin-bottom: 10px;
     }
@@ -21,7 +22,7 @@
       max-height: 200px;
       overflow-y: scroll;
       margin-top: 10px;
-
+      
       .item {
         padding: 10px;
         transition: all 0.3s ease-in-out;

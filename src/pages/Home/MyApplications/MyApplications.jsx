@@ -18,7 +18,7 @@ const MyApplications = (props) => {
     {
       exact: true,
       component: <MyApplicationDescription />,
-      path: url + "/:id",
+      path: url + "/:applicationId",
       name: "My Application Description",
       type: "",
     },

@@ -29,6 +29,7 @@ const Input = ({
         required={required}
         readOnly={readOnly}
       />
+      {/* {console.log(error)} */}
       <div className="invalid-feedback">{error}</div>
     </div>
   );

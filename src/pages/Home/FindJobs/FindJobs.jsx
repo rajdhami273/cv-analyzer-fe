@@ -19,14 +19,14 @@ const FindJobs = props => {
     {
       exact: true,
       component: <FindJobDescription />,
-      path: url + "/:id",
+      path: url + "/:jobId",
       name: "Find Job Description",
       type: ""
     },
     {
       exact: true,
       component: <Apply />,
-      path: url + "/apply/:id",
+      path: url + "/:jobId/apply",
       name: "Apply",
       type: ""
     }

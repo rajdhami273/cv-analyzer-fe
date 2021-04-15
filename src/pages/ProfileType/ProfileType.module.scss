@@ -1,0 +1,72 @@
+.profilecard6 {
+  max-width: 300px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  margin: 10px auto;
+  height: max-content;
+  cursor: pointer;
+  //   padding: 20px
+}
+
+.profilecard6 img {
+  transition: all 0.15s linear;
+}
+
+.profilecard6 .profilename {
+  //   position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #fff;
+  padding: 15px 20px;
+  background: linear-gradient(120deg, #1de9b6 26%, #fff 100%);
+  transition: all 0.15s linear;
+}
+
+.profilecard6 .profileposition {
+  //   position: absolute;
+  color: rgba(255, 255, 255, 0.4);
+  left: 30px;
+  top: 100px;
+  transition: all 0.15s linear;
+}
+
+.profilecard6 .profileoverview {
+  //   position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background: linear-gradient(0deg, #cc2b5e, #fff);
+  color: #fff;
+  padding: 50px 0px 20px 0px;
+  transition: all 0.15s linear;
+}
+
+.profilecard6 .profileoverview h3 {
+  font-weight: bold;
+}
+
+.profilecard6 .profileoverview p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.profilecard6:hover img {
+  filter: brightness(80%);
+}
+
+.profilecard6:hover .profilename {
+  padding-left: 25px;
+  padding-top: 20px;
+}
+
+.profilecard6:hover .profileposition {
+  left: 40px;
+}
+
+.profilecard6:hover .profileoverview {
+  padding-bottom: 25px;
+}

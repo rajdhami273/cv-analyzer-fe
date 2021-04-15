@@ -2,9 +2,11 @@ import React from "react";
 import { useHistory } from "react-router";
 import css from "./LandingPage.module.scss";
 
-const LandingPage = (props) => {
+const LandingPage = props => {
   const history = useHistory();
   const goToLogin = () => history.push("/login");
+  const goToProfileType = () =>
+    history.push(localStorage.getItem("authToken") ? "/home" : "/profile-type");
   return (
     <div className={css.wrapper}>
       <div className={css.container}>
@@ -20,7 +22,7 @@ const LandingPage = (props) => {
             </p>
             <button
               className="btn btn-primary d-inline-flex flex-row align-items-center"
-              onClick={goToLogin}
+              onClick={goToProfileType}
             >
               Get started now
               <svg
@@ -30,9 +32,9 @@ const LandingPage = (props) => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="feather feather-arrow-right ml-2"
               >
                 <line x1="5" y1="12" x2="19" y2="12"></line>

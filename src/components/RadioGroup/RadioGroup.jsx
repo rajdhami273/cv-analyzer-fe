@@ -1,53 +1,51 @@
 import React from "react";
 import css from "./RadioGroup.module.scss";
 
-const RadioGroup = ({ label, options: [] }) => {
+const RadioGroup = ({
+  options,
+  label,
+  type,
+  placeholder,
+  name,
+  value,
+  onChange,
+  onBlur,
+  disabled,
+  error,
+  required,
+  readOnly,
+  showDefaultOption,
+  titleKey,
+  valueKey
+}) => {
   return (
-    <fieldset class="form-group">
-      <div class="row">
-        <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-        <div class="col-sm-10">
-          <div class="form-check">
+    <div className="form-group">
+      <label className="my-1 mr-2 label" htmlFor="inlineFormCustomSelectPref">
+        {label}
+      </label>
+      {options.map((item, index) => {
+        return (
+          <div className="form-check" key={index}>
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="radio"
-              name="gridRadios"
-              id="gridRadios1"
-              value="option1"
-              checked
+              name={name}
+              id="exampleRadios1"
+              value={valueKey ? item[valueKey] : item}
+              onChange={e => onChange(e.target.value)}
+              onBlur={onBlur}
+              required={required}
+              readOnly={readOnly}
+              disabled={disabled}
             />
-            <label class="form-check-label" for="gridRadios1">
-              First radio
+            <label className="form-check-label" htmlFor="exampleRadios1">
+              {titleKey ? item[titleKey] : item}
             </label>
           </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="gridRadios"
-              id="gridRadios2"
-              value="option2"
-            />
-            <label class="form-check-label" for="gridRadios2">
-              Second radio
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="gridRadios"
-              id="gridRadios3"
-              value="option3"
-            />
-            <label class="form-check-label" for="gridRadios3">
-              Third disabled radio
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="invalid-feedback">{error}</div>
-    </fieldset>
+        );
+      })}
+      <div className="invalid-feedback">{error}</div>
+    </div>
   );
 };
 

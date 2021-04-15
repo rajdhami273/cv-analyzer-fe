@@ -18,7 +18,7 @@ export const homeRoutes = url => [
     path: url + "/create-job",
     exact: false,
     component: CreateJob,
-    roles: ["company"]
+    roles: ["employer"]
   },
   {
     name: "Find Jobs",

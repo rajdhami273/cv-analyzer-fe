@@ -7,40 +7,61 @@ import https from "../../services/https";
 import Input from "../../components/Input/Input";
 import { AppContext } from "../../AppProvider";
 
-export default function Login() {
-  const { userType, getUserDetailsFromServer } = useContext(AppContext);
-  console.log(userType)
+export default function Register() {
+  const context = useContext(AppContext);
   const history = useHistory();
   const goToHome = () => history.push("/home");
-  const goToRegister = () => history.push("/register");
 
-  const loginValidationSchema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .nullable()
+      .label("First name")
+      .required(),
+    lastName: Yup.string()
+      .nullable()
+      .label("Last name"),
+    // mobile: Yup.string()
+    //   .nullable()
+    //   .label("Mobile number")
+    //   .required("")
+    //   .numbersOnly("")
+    //   .mobile(""),
     email: Yup.string()
+      .nullable()
       .label("Email")
-      .required("Email required"), //Yup.string().required("Username or email required"),
+      .required()
+      .email(),
     password: Yup.string()
+      .nullable()
       .label("Password")
-      .required("Password required")
       .min(4, "Minimum length should be 4")
-    // rememberMe: Yup.boolean().label("rememberMe")
-    // .checkboxChecked("")
+      .required(),
+    confirmPassword: Yup.string()
+      .nullable()
+      .label("Confirm password")
+      .required()
+      .min(4, "Minimum length should be 4")
+      .oneOf(
+        [Yup.ref("password")],
+        "Password and Confirm password do not match"
+      )
   });
   const [loggingIn, setLoggingIn] = useState(false);
-  const login = async values => {
+  const register = async values => {
     setLoggingIn(true);
     try {
-      const res = await https.post("/user/login", {
+      const res = await https.post("/user/register", {
         ...values,
-        userType: userType
+        userType: context.userType
       });
       if (res.data) {
         console.log(res.data);
         localStorage.setItem("authToken", res.data.payload.token);
         if (res.data.payload) {
-          getUserDetailsFromServer();
+          context.getUserDetailsFromServer();
           goToHome();
         } else {
-          goToRegister();
+          // history.push("/register");
         }
       }
     } catch (error) {
@@ -60,18 +81,22 @@ export default function Login() {
         <div className="row justify-content-center">
           <div className="col-md-8">
             <div className="mb-4">
-              <h3>Sign In</h3>
+              <h3>Sign up</h3>
               <p className="mb-4"></p>
             </div>
             <Formik
-              // enableReinitialize
+              enableReinitialize
+              validateOnBlur={true}
               initialValues={{
+                firstName: "",
+                lastName: "",
                 email: "",
-                password: ""
+                password: "",
+                confirmPassword: ""
               }}
-              validationSchema={loginValidationSchema}
+              validationSchema={validationSchema}
               onSubmit={values => {
-                login(values);
+                register(values);
               }}
             >
               {formik => {
@@ -87,12 +112,37 @@ export default function Login() {
                 return (
                   <form>
                     <Input
+                      label={"First name*"}
+                      type={"text"}
+                      placeholder={"Enter your first name"}
+                      value={values.firstName || initialValues.firstName}
+                      onChange={handleChange("firstName")}
+                      onBlur={handleBlur("firstName")}
+                      disabled={false}
+                      error={touched.firstName && errors.firstName}
+                      required={true}
+                    />
+                    <Input
+                      label={"Last name"}
+                      type={"text"}
+                      placeholder={"Enter last name"}
+                      value={values.lastName || initialValues.lastName}
+                      onChange={handleChange("lastName")}
+                      onBlur={handleBlur("lastName")}
+                      disabled={false}
+                      error={touched.lastName && errors.lastName}
+                      required={true}
+                    />
+                    {console.log(touched, errors)}
+                    <Input
                       label="Email"
+                      type="email"
                       placeholder="Enter email"
                       value={values.email || initialValues.email}
                       onChange={handleChange("email")}
                       onBlur={handleBlur("email")}
                       error={touched.email && errors.email}
+                      required={true}
                     />
                     <Input
                       label="Password"
@@ -102,6 +152,20 @@ export default function Login() {
                       onChange={handleChange("password")}
                       onBlur={handleBlur("password")}
                       error={touched.password && errors.password}
+                      required={true}
+                    />
+                    <Input
+                      label={"Confirm Password*"}
+                      type={"password"}
+                      placeholder={"Confirm Password"}
+                      value={
+                        values.confirmPassword || initialValues.confirmPassword
+                      }
+                      onChange={handleChange("confirmPassword")}
+                      onBlur={handleBlur("confirmPassword")}
+                      disabled={false}
+                      error={touched.confirmPassword && errors.confirmPassword}
+                      required={true}
                     />
                     <button
                       type="submit"
@@ -115,14 +179,7 @@ export default function Login() {
                           aria-hidden="true"
                         ></span>
                       ) : null}
-                      Log In
-                    </button>
-                    <button
-                      type="button"
-                      onClick={goToRegister}
-                      className="btn text-white btn-block btn-primary"
-                    >
-                      Register
+                      Sign up
                     </button>
                     {/* <span className="d-block text-left my-4 text-muted">
                 {" "}
