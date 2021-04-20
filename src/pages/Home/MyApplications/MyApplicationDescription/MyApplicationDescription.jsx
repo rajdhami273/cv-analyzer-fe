@@ -3,6 +3,7 @@ import css from "./MyApplicationDescription.module.scss";
 import { useParams, useHistory } from "react-router-dom";
 import https from "../../../../services/https";
 import MyData from "./MyData";
+import AllData from "./AllData";
 
 const MyApplicationDescription = props => {
   const history = useHistory();
@@ -12,6 +13,7 @@ const MyApplicationDescription = props => {
 
   const [getting, setGetting] = useState(false);
   const [application, setApplication] = useState([]);
+  const [applications, setApplications] = useState([]);
   const getApplication = async () => {
     setGetting(true);
     try {
@@ -19,6 +21,7 @@ const MyApplicationDescription = props => {
       if (res.data) {
         console.log(res.data);
         setApplication(res.data);
+        getApplications(res.data.job)
       }
     } catch (error) {
       if (error.response) {
@@ -31,6 +34,24 @@ const MyApplicationDescription = props => {
     }
   };
 
+  const getApplications = async(jobId) => {
+    setGetting(true);
+    try {
+      const res = await https.get("/application/for-job/"+jobId);
+      if (res.data) {
+        console.log(res.data);
+        setApplications(res.data);
+      }
+    } catch (error) {
+      if (error.response) {
+        // setErrorMessage(error.response.data.message);
+      } else {
+        // setErrorMessage(error.message);
+      }
+    } finally {
+      setGetting(!true);
+    }
+  }
   const [tab, setTab] = useState("my");
   const toggleTab = (e, tabType) => {
     e.preventDefault();
@@ -38,6 +59,7 @@ const MyApplicationDescription = props => {
   };
   useEffect(() => {
     getApplication();
+    // getApplications();
   }, []);
   return (
     <>
@@ -76,7 +98,7 @@ const MyApplicationDescription = props => {
           role="tabpanel"
           aria-labelledby="home-tab"
         >
-          <MyData />
+          <MyData application={application} />
         </div>
         <div
           className={"tab-pane fade " + (tab == "all" ? "show active" : "")}
@@ -84,7 +106,7 @@ const MyApplicationDescription = props => {
           role="tabpanel"
           aria-labelledby="profile-tab"
         >
-          All
+          <AllData applications={applications}/>
         </div>
       </div>
     </>
