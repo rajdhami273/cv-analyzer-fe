@@ -3,9 +3,9 @@ import css from "./FindJobsList.module.scss";
 import { useHistory } from "react-router-dom";
 import https from "../../../../services/https";
 
-const FindJobsList = props => {
+const FindJobsList = (props) => {
   const history = useHistory();
-  const goToDescription = jobId => history.push("find-jobs/" + jobId);
+  const goToDescription = (jobId) => history.push("find-jobs/" + jobId);
 
   const [getting, setGetting] = useState(false);
   const [jobs, setJobs] = useState([]);
@@ -53,7 +53,8 @@ const FindJobsList = props => {
               </div>
               <div className="media-body">
                 <h4 className="media-heading">{title}</h4>
-                {description}
+                {description.substr(0, 80) +
+                  (description.length > 80 ? " ..." : "")}
               </div>
             </div>
           </div>

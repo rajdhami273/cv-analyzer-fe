@@ -18,7 +18,7 @@ const MyCreatedJobs = (props) => {
     {
       exact: true,
       component: <MyCreatedJobDescription />,
-      path: url + "/:id",
+      path: url + "/:jobId",
       name: "My Created Job Description",
       type: "",
     },

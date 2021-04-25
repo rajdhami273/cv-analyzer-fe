@@ -41,9 +41,13 @@ code {
 }
 .btn-primary:not(:disabled):not(.disabled):active,
 .btn-primary:not(:disabled):not(.disabled).active,
-.btn.btn-primary:focus ,
+.btn.btn-primary:focus,
 .show > .btn-primary.dropdown-toggle {
   color: #ffffff;
   background-color: #13c095;
   border-color: #12b58c;
+}
+
+.invalid-feedback {
+  display: block;
 }

@@ -3,7 +3,7 @@ import css from "./FindJobDescription.module.scss";
 import { useHistory, useParams } from "react-router-dom";
 import https from "../../../../services/https";
 
-const FindJobDescription = props => {
+const FindJobDescription = (props) => {
   const history = useHistory();
   const { jobId } = useParams();
   const goToApply = () => history.push(jobId + "/apply");
@@ -50,8 +50,12 @@ const FindJobDescription = props => {
                 <h4 className="media-heading">{job?.title}</h4>
                 {job?.location}
                 <div className="mt-4">
-                  <button className="btn btn-primary" onClick={goToApply}>
-                    Apply
+                  <button
+                    className="btn btn-primary"
+                    disabled={job?.myApplication}
+                    onClick={goToApply}
+                  >
+                    {job?.myApplication ? "Applied" : "Apply"}
                   </button>
                 </div>
               </div>

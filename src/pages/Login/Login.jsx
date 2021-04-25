@@ -9,29 +9,28 @@ import { AppContext } from "../../AppProvider";
 
 export default function Login() {
   const { userType, getUserDetailsFromServer } = useContext(AppContext);
-  console.log(userType)
+  console.log(userType);
   const history = useHistory();
   const goToHome = () => history.push("/home");
   const goToRegister = () => history.push("/register");
 
+  const [error, setError] = useState(false);
   const loginValidationSchema = Yup.object().shape({
-    email: Yup.string()
-      .label("Email")
-      .required("Email required"), //Yup.string().required("Username or email required"),
+    email: Yup.string().label("Email").required("Email required"), //Yup.string().required("Username or email required"),
     password: Yup.string()
       .label("Password")
       .required("Password required")
-      .min(4, "Minimum length should be 4")
+      .min(4, "Minimum length should be 4"),
     // rememberMe: Yup.boolean().label("rememberMe")
     // .checkboxChecked("")
   });
   const [loggingIn, setLoggingIn] = useState(false);
-  const login = async values => {
+  const login = async (values) => {
     setLoggingIn(true);
     try {
       const res = await https.post("/user/login", {
         ...values,
-        userType: userType
+        userType: userType,
       });
       if (res.data) {
         console.log(res.data);
@@ -45,8 +44,10 @@ export default function Login() {
       }
     } catch (error) {
       if (error.response) {
+        setError(error.response.data.message);
         // setErrorMessage(error.response.data.message);
       } else {
+        setError(error.message);
         // setErrorMessage(error.message);
       }
       // toggleErrorPopup();
@@ -67,14 +68,14 @@ export default function Login() {
               // enableReinitialize
               initialValues={{
                 email: "",
-                password: ""
+                password: "",
               }}
               validationSchema={loginValidationSchema}
-              onSubmit={values => {
+              onSubmit={(values) => {
                 login(values);
               }}
             >
-              {formik => {
+              {(formik) => {
                 const {
                   initialValues,
                   values,
@@ -82,7 +83,7 @@ export default function Login() {
                   handleChange,
                   errors,
                   touched,
-                  handleSubmit
+                  handleSubmit,
                 } = formik;
                 return (
                   <form>
@@ -103,6 +104,7 @@ export default function Login() {
                       onBlur={handleBlur("password")}
                       error={touched.password && errors.password}
                     />
+                    <div className="invalid-feedback mb-4">{error}</div>
                     <button
                       type="submit"
                       onClick={handleSubmit}

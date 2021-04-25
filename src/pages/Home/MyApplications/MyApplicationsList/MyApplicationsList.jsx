@@ -3,9 +3,9 @@ import css from "./MyApplicationsList.module.scss";
 import { useHistory } from "react-router-dom";
 import https from "../../../../services/https";
 
-const MyApplicationsList = props => {
+const MyApplicationsList = (props) => {
   const history = useHistory();
-  const goToDescription = applicationId =>
+  const goToDescription = (applicationId) =>
     history.push("my-applications/" + applicationId);
 
   const [getting, setGetting] = useState(false);
@@ -35,7 +35,8 @@ const MyApplicationsList = props => {
   return (
     <div className="row">
       {jobs.map((item, index) => {
-        const { _id, title, description, status } = item.jobDetails;
+        const { _id, title, description } = item.jobDetails;
+        const { status } = item;
         return (
           <div
             className="col-md-6 mb-4"
@@ -54,7 +55,8 @@ const MyApplicationsList = props => {
               </div>
               <div className="media-body">
                 <h4 className="media-heading">{title}</h4>
-                {description}
+                {description.substr(0, 80) +
+                  (description.length > 80 ? " ..." : "")}
                 <div className="text text-sm font-weight-light">
                   <strong>Status:</strong>{" "}
                   <span style={{ textTransform: "capitalize" }}>

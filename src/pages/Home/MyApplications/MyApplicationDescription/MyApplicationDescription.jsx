@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import css from "./MyApplicationDescription.module.scss";
 import { useParams, useHistory } from "react-router-dom";
 import https from "../../../../services/https";
 import MyData from "./MyData";
 import AllData from "./AllData";
+import { AppContext } from "../../../../AppProvider";
 
-const MyApplicationDescription = props => {
+const MyApplicationDescription = (props) => {
   const history = useHistory();
+  const { userDetails } = useContext(AppContext);
   const { applicationId } = useParams();
   //   const goToDescription = applicationId =>
   //     history.push("my-applications/" + applicationId);
 
   const [getting, setGetting] = useState(false);
   const [application, setApplication] = useState([]);
-  const [applications, setApplications] = useState([]);
   const getApplication = async () => {
     setGetting(true);
     try {
@@ -21,7 +22,7 @@ const MyApplicationDescription = props => {
       if (res.data) {
         console.log(res.data);
         setApplication(res.data);
-        getApplications(res.data.job)
+        getApplications(res.data.job);
       }
     } catch (error) {
       if (error.response) {
@@ -34,10 +35,11 @@ const MyApplicationDescription = props => {
     }
   };
 
-  const getApplications = async(jobId) => {
+  const [applications, setApplications] = useState([]);
+  const getApplications = async (jobId) => {
     setGetting(true);
     try {
-      const res = await https.get("/application/for-job/"+jobId);
+      const res = await https.get("/application/for-job/" + jobId);
       if (res.data) {
         console.log(res.data);
         setApplications(res.data);
@@ -51,7 +53,8 @@ const MyApplicationDescription = props => {
     } finally {
       setGetting(!true);
     }
-  }
+  };
+
   const [tab, setTab] = useState("my");
   const toggleTab = (e, tabType) => {
     e.preventDefault();
@@ -59,7 +62,6 @@ const MyApplicationDescription = props => {
   };
   useEffect(() => {
     getApplication();
-    // getApplications();
   }, []);
   return (
     <>
@@ -72,7 +74,7 @@ const MyApplicationDescription = props => {
             role="tab"
             aria-controls="home"
             aria-selected="true"
-            onClick={e => toggleTab(e, "my")}
+            onClick={(e) => toggleTab(e, "my")}
           >
             My Application
           </a>
@@ -85,7 +87,7 @@ const MyApplicationDescription = props => {
             role="tab"
             aria-controls="profile"
             aria-selected="false"
-            onClick={e => toggleTab(e, "all")}
+            onClick={(e) => toggleTab(e, "all")}
           >
             How I fare with others?
           </a>
@@ -93,7 +95,7 @@ const MyApplicationDescription = props => {
       </ul>
       <div className="tab-content" id="myTabContent">
         <div
-          className={"tab-pane fade " + (tab == "my" ? "show active" : "")}
+          className={"tab-pane py-4 fade " + (tab == "my" ? "show active" : "")}
           id="home"
           role="tabpanel"
           aria-labelledby="home-tab"
@@ -101,12 +103,14 @@ const MyApplicationDescription = props => {
           <MyData application={application} />
         </div>
         <div
-          className={"tab-pane fade " + (tab == "all" ? "show active" : "")}
+          className={
+            "tab-pane py-4 fade " + (tab == "all" ? "show active" : "")
+          }
           id="profile"
           role="tabpanel"
           aria-labelledby="profile-tab"
         >
-          <AllData applications={applications}/>
+          <AllData userId={userDetails?._id} applications={applications} />
         </div>
       </div>
     </>

@@ -8,7 +8,7 @@ const UserAnswers = ({
   sectionKey,
   setUserAnswers,
   data,
-  userAnswers
+  userAnswers,
 }) => {
   const setAnswer = (answer, index) => {
     let obj = { ...userAnswers };
@@ -29,29 +29,32 @@ const UserAnswers = ({
         const { inputType, options, question } = item;
         return (
           <div key={index}>
-            {inputType == "select" && (
-              <Select
-                label={question}
-                options={options}
-                value={userAnswers[sectionKey][index].answer}
-                titleKey="title"
-                valueKey="title"
-                onChange={answer => setAnswer(answer, index)}
-                onBlur={() => {}}
-              />
-            )}{" "}
-            {inputType == "radio" && (
-              <RadioGroup
-                label={question}
-                name={"option" + index}
-                options={options}
-                value={userAnswers[sectionKey][index].answer}
-                titleKey="title"
-                valueKey="title"
-                onChange={answer => setAnswer(answer, index)}
-                onBlur={() => {}}
-              />
-            )}
+            <div className="d-flex">
+              <span className="mt-1 mr-2">{index + 1}) </span>
+              {inputType == "select" && (
+                <Select
+                  label={question}
+                  options={options}
+                  value={userAnswers[sectionKey][index].answer}
+                  titleKey="title"
+                  valueKey="title"
+                  onChange={(answer) => setAnswer(answer, index)}
+                  onBlur={() => {}}
+                />
+              )}{" "}
+              {inputType == "radio" && (
+                <RadioGroup
+                  label={question}
+                  name={"option" + index}
+                  options={options}
+                  value={userAnswers[sectionKey][index].answer}
+                  titleKey="title"
+                  valueKey="title"
+                  onChange={(answer) => setAnswer(answer, index)}
+                  onBlur={() => {}}
+                />
+              )}
+            </div>
           </div>
         );
       })}

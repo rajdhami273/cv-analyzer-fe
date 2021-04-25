@@ -32,21 +32,21 @@ const MyData = ({ application }) => {
   );
   return (
     <div className="row">
-      {headingAndValue("Email", application.email)}
-      {headingAndValue("Experience", application.experience)}
-      {headingAndValue("Skills", application.skills?.join(",") || "N/A")}
+      {headingAndValue("Email", application?.email)}
+      {headingAndValue("Experience", application?.experience)}
+      {headingAndValue("Skills", application?.skills?.join(",") || "N/A")}
       <div className="col-12">
         <h3>Aptitude Section</h3>
-        {application.aptitudeQuestions?.map((item, index) => {
+        {application?.aptitudeQuestions?.map((item, index) => {
           const { question, answer } = item;
-          return qAndAView(question, answer);
+          return <div key={index}>{qAndAView(question, answer)}</div>;
         })}
       </div>
       <div className="col-12">
         <h3>Personality Section</h3>
-        {application.personalityQuestions?.map((item, index) => {
+        {application?.personalityQuestions?.map((item, index) => {
           const { question, answer } = item;
-          return qAndAView(question, answer);
+          return <div key={index}>{qAndAView(question, answer)}</div>;
         })}
       </div>
     </div>
