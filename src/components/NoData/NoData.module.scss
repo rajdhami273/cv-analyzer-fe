@@ -1,0 +1,28 @@
+.blankState {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 40px 20px;
+  font-size: 100%;
+  color: #737373;
+  text-align: center;
+  //   border: 1px solid #ddd;
+  background-color: #fefefe;
+}
+.blankState h1,
+.blankState p {
+  font-weight: 300;
+}
+.blankState p {
+  margin-bottom: 15px;
+}
+.blankState.blankStatelg {
+  padding: 90px 45px;
+  font-size: 150%;
+}
+.blankState.blankStatesm {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 10px;
+  font-size: 85%;
+}

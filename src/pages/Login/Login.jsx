@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router";
-// import css from "./Login.scss";
+import css from "./Login.module.scss";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import https from "../../services/https";
@@ -56,77 +56,78 @@ export default function Login() {
     }
   };
   return (
-    <div className="row justify-content-center align-items-center vh-100">
-      <div className="col-md-6 contents">
-        <div className="row justify-content-center">
-          <div className="col-md-8">
-            <div className="mb-4">
-              <h3>Sign In</h3>
-              <p className="mb-4"></p>
-            </div>
-            <Formik
-              // enableReinitialize
-              initialValues={{
-                email: "",
-                password: "",
-              }}
-              validationSchema={loginValidationSchema}
-              onSubmit={(values) => {
-                login(values);
-              }}
-            >
-              {(formik) => {
-                const {
-                  initialValues,
-                  values,
-                  handleBlur,
-                  handleChange,
-                  errors,
-                  touched,
-                  handleSubmit,
-                } = formik;
-                return (
-                  <form>
-                    <Input
-                      label="Email"
-                      placeholder="Enter email"
-                      value={values.email || initialValues.email}
-                      onChange={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      error={touched.email && errors.email}
-                    />
-                    <Input
-                      label="Password"
-                      type="password"
-                      placeholder="Enter password"
-                      value={values.password || initialValues.password}
-                      onChange={handleChange("password")}
-                      onBlur={handleBlur("password")}
-                      error={touched.password && errors.password}
-                    />
-                    <div className="invalid-feedback mb-4">{error}</div>
-                    <button
-                      type="submit"
-                      onClick={handleSubmit}
-                      className="btn text-white btn-block btn-primary"
-                    >
-                      {loggingIn ? (
-                        <span
-                          className="spinner-border spinner-border-sm mr-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      ) : null}
-                      Log In
-                    </button>
-                    <button
-                      type="button"
-                      onClick={goToRegister}
-                      className="btn text-white btn-block btn-primary"
-                    >
-                      Register
-                    </button>
-                    {/* <span className="d-block text-left my-4 text-muted">
+    <div className={css.container}>
+      <div className="row justify-content-center align-items-center vh-100">
+        <div className="col-md-6 contents">
+          <div className="row justify-content-center">
+            <div className="col-md-8 shadow p-3 rounded">
+              <div className="mb-4">
+                <h3>Sign In</h3>
+                <p className="mb-4"></p>
+              </div>
+              <Formik
+                // enableReinitialize
+                initialValues={{
+                  email: "",
+                  password: "",
+                }}
+                validationSchema={loginValidationSchema}
+                onSubmit={(values) => {
+                  login(values);
+                }}
+              >
+                {(formik) => {
+                  const {
+                    initialValues,
+                    values,
+                    handleBlur,
+                    handleChange,
+                    errors,
+                    touched,
+                    handleSubmit,
+                  } = formik;
+                  return (
+                    <form>
+                      <Input
+                        label="Email"
+                        placeholder="Enter email"
+                        value={values.email || initialValues.email}
+                        onChange={handleChange("email")}
+                        onBlur={handleBlur("email")}
+                        error={touched.email && errors.email}
+                      />
+                      <Input
+                        label="Password"
+                        type="password"
+                        placeholder="Enter password"
+                        value={values.password || initialValues.password}
+                        onChange={handleChange("password")}
+                        onBlur={handleBlur("password")}
+                        error={touched.password && errors.password}
+                      />
+                      <div className="invalid-feedback mb-4">{error}</div>
+                      <button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className="btn text-white btn-block btn-primary"
+                      >
+                        {loggingIn ? (
+                          <span
+                            className="spinner-border spinner-border-sm mr-2"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                        ) : null}
+                        Log In
+                      </button>
+                      <button
+                        type="button"
+                        onClick={goToRegister}
+                        className="btn text-white btn-block btn-primary"
+                      >
+                        Register
+                      </button>
+                      {/* <span className="d-block text-left my-4 text-muted">
                 {" "}
                 or sign in with
               </span>
@@ -141,10 +142,11 @@ export default function Login() {
                   <span className="icon-google mr-3"></span>
                 </a>
               </div> */}
-                  </form>
-                );
-              }}
-            </Formik>
+                    </form>
+                  );
+                }}
+              </Formik>
+            </div>
           </div>
         </div>
       </div>

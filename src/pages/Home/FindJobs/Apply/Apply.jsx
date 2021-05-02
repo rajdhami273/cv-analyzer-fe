@@ -42,13 +42,16 @@ const Apply = (props) => {
         ).length
     );
     console.log(filteredData, userSkills, requiredSkills);
-    return filteredData.length * 100;
+    return [
+      filteredData,
+      Math.round((filteredData.length * 100) / data.skills.length),
+    ];
   };
   const onSubmit = async (values) => {
     // console.log(values);
     let aptitudeGrade = 0,
       personalityGrade = 0,
-      skillsGrade = 0,
+      // skillsGrade = 0,
       experienceGrade = 0;
     //For Aptitude grade
     aptitudeGrade = Math.round(
@@ -61,17 +64,17 @@ const Apply = (props) => {
         userAnswerGradesTotal(data.personalityQuestions)
     );
     console.log(values.skills);
-    skillsGrade = Math.round(
-      getSkillsGrade(
-        [...values.skills, ...skillsFromServer].filter(
+    let [parsedSkills, skillsGrade] = getSkillsGrade(
+      [...values.skills, ...skillsFromServer]
+        .filter(
           (item) =>
             item &&
             (data.skills.indexOf(item) > -1 ||
               data.skills.filter((it) => it.toLowerCase().indexOf(item) > -1)
                 .length)
-        ).map(item => item.toLowerCase()),
-        data.skills.map((item) => item.toLowerCase())
-      ) / data.skills.length
+        )
+        .map((item) => item.toLowerCase()),
+      data.skills.map((item) => item.toLowerCase())
     );
     // skillsGrade =
     experienceGrade =
@@ -94,6 +97,7 @@ const Apply = (props) => {
     try {
       const res = await https.post("/application/apply", {
         ...values,
+        skills: [...values.skills, ...parsedSkills],
         aptitudeGrade,
         personalityGrade,
         skillsGrade,
@@ -383,16 +387,20 @@ const Apply = (props) => {
                 // saveNewOptionFunction={() => {}}
                 required={true}
               />
-              {data.aptitudeQuestions && userAnswers.aptitudeQuestions && (
-                <UserAnswers
-                  sectionName="Aptitude"
-                  sectionKey="aptitudeQuestions"
-                  setUserAnswers={setUserAnswers}
-                  data={data}
-                  userAnswers={userAnswers}
-                />
-              )}
-              {data.personalityQuestions &&
+              {(data.aptitudeQuestions &&
+                data.aptitudeQuestions.length &&
+                userAnswers.aptitudeQuestions && (
+                  <UserAnswers
+                    sectionName="Aptitude"
+                    sectionKey="aptitudeQuestions"
+                    setUserAnswers={setUserAnswers}
+                    data={data}
+                    userAnswers={userAnswers}
+                  />
+                )) ||
+                null}
+              {(data.personalityQuestions &&
+                data.personalityQuestions.length &&
                 userAnswers.personalityQuestions && (
                   <UserAnswers
                     sectionName="Personality"
@@ -401,7 +409,8 @@ const Apply = (props) => {
                     data={data}
                     userAnswers={userAnswers}
                   />
-                )}
+                )) ||
+                null}
               <button
                 className="btn btn-primary w-100 my-4"
                 onClick={handleSubmit}

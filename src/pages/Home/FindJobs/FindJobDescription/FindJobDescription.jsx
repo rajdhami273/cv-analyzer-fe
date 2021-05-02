@@ -65,6 +65,16 @@ const FindJobDescription = (props) => {
           <div className={css.description + " " + "col-12"}>
             {job?.description}
           </div>
+          <hr className="col-12"></hr>
+          <div className={css.description + " " + "col-12"}>
+            <span className="h6">Required skills: </span>
+            {job?.skills.join(", ")}
+          </div>
+          <hr className="col-12"></hr>
+          <div className={css.description + " " + "col-12"}>
+            <span className="h6">Minimum Experience:</span>{" "}
+            {job?.minimumExperience} years
+          </div>
         </>
       ) : (
         "No data"

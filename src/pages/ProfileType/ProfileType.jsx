@@ -3,15 +3,15 @@ import css from "./ProfileType.module.scss";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../../AppProvider";
 
-const ProfileType = props => {
+const ProfileType = (props) => {
   const { setUserTypeFunc } = useContext(AppContext);
   const history = useHistory();
-  const goToLogin = userType => {
+  const goToLogin = (userType) => {
     setUserTypeFunc(userType);
     history.push("/login");
   };
   return (
-    <div className="container">
+    <div className={" vw-100 " + " " + css.container}>
       <div className="row vh-100 align-items-center justify-content-center">
         <div className="col-4">
           <div
