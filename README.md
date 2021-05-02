@@ -1,6 +1,7 @@
 # How to run?
 1. cmd: npm i
 2. cmd: npm run start
+cmd: command line interface
 Make sure that nodejs is installed and you are in frontend root directory.
 
 # Getting Started with Create React App
